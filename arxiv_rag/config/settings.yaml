@@ -1,0 +1,35 @@
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  embeddings_dir: "data/embeddings"
+  categories: ["cs.AI", "cs.LG", "cs.CL"]  # AI, ML, Computational Linguistics
+  max_papers: 1000
+  chunk_size: 1000
+  chunk_overlap: 200
+
+embeddings:
+  model: "sentence-transformers/all-mpnet-base-v2"
+  batch_size: 32
+  dimension: 768
+
+vectorstore:
+  type: "chromadb"
+  collection_name: "arxiv_papers"
+  persist_directory: "data/embeddings/chromadb"
+  distance_metric: "cosine"
+
+retrieval:
+  top_k: 5
+  score_threshold: 0.7
+  rerank: true
+
+llm:
+  provider: "openai"
+  model: "gpt-4-turbo-preview"
+  temperature: 0.1
+  max_tokens: 1000
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  log_level: "info"
