@@ -12,11 +12,13 @@ class VectorStore:
                  collection_name: str,
                  persist_directory: str,
                  embedding_function):
-        self.client = chromadb.Client(Settings(
-            persist_directory=persist_directory,
-            anonymized_telemetry=False
-        ))
-        
+        # self.client = chromadb.Client(Settings(
+        #     persist_directory=persist_directory,
+        #     anonymized_telemetry=False
+        # ))
+
+        self.client = chromadb.PersistentClient(path=persist_directory) 
+         
         self.collection = self.client.get_or_create_collection(
             name=collection_name,
             metadata={"hnsw:space": "cosine"}

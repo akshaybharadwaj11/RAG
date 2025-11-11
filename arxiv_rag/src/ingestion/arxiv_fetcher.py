@@ -5,6 +5,7 @@ from typing import List, Dict
 from pathlib import Path
 import json
 from datetime import datetime
+import requests 
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -12,7 +13,7 @@ logger = logging.getLogger(__name__)
 class ArxivFetcher:
     """Fetch papers from ArXiv API"""
     
-    def __init__(self, categories: List[str], max_results: int = 1000):
+    def __init__(self, categories: List[str], max_results: int = 10):
         self.categories = categories
         self.max_results = max_results
         
@@ -46,7 +47,11 @@ class ArxivFetcher:
                 # Download PDF
                 pdf_path = output_dir / f"{result.entry_id.split('/')[-1]}.pdf"
                 try:
-                    result.download_pdf(str(pdf_path))
+                    # result.download_pdf(str(pdf_path))
+                    response = requests.get(result.pdf_url, timeout=30, stream=True)  # ✅ Proven to work
+                    with open(pdf_path, 'wb') as f:
+                        for chunk in response.iter_content(chunk_size=8192):
+                            f.write(chunk)
                     paper_data["pdf_path"] = str(pdf_path)
                 except Exception as e:
                     logger.error(f"Failed to download {result.entry_id}: {e}")
