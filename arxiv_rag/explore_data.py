@@ -5,7 +5,7 @@
 import chromadb
 from chromadb.config import Settings
 import pandas as pd
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 class DataExplorer:
     """Explore ingested data"""
